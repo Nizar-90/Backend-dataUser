@@ -5,7 +5,7 @@ const getAllUsers = async (req, res) => {
       
       const [data] = await UsersModel.getAllUsers();
 
-      res.json({
+      res.status(200).json({
          message : "Get All Users Success!",
          data : data
       })
@@ -22,9 +22,17 @@ const getAllUsers = async (req, res) => {
 const createNewUser = async (req, res) => {
     // const bodyPayload = req.body --restructuring bellow
    const {body} = req
+
+   if (!body.email || !body.name || !body.address) {
+      return res.status(400).json({
+         message : 'Data tidak lengkap!',
+         data: null,
+      })
+   }
+
    try {
       await UsersModel.createNewUser(body);
-      res.json({
+      res.status(201).json({
          message :'Create New User Success', 
          data : req.body
       })
@@ -44,7 +52,7 @@ const updateUser = async (req, res) => {
    try {
       
       await UsersModel.updateUser(body, idUser)
-      res.json({
+      res.status(200).json({
          message: "UPDATE USER SUCCESS!",
          data : {
             id: idUser,
